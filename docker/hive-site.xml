@@ -1,0 +1,14 @@
+<configuration>
+
+<property>
+	<name>hive.aux.jars.path</name>
+	<value>file:///opt/hive/lib/hive-hbase-handler-1.2.1.jar,file:///opt/hive/lib/zookeeper-3.4.6.jar,file:///opt/hive/lib/guava-14.0.1.jar,file:///opt/hive/lib/hbase-client-1.1.2.jar
+</value>
+</property>
+
+ <property>
+	<name>hbase.zookeeper.quorum</name>
+	<value>hbase</value>
+</property>
+
+</configuration>

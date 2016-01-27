@@ -1,0 +1,15 @@
+hbase:
+ container_name: hbase
+ hostname: hbase
+ image: sixeyed/hbase-succinctly:2
+ expose:
+  - "2181"
+  - "60000"
+  - "60020"
+
+hive:
+ container_name: hive
+ hostname: hive
+ image: sixeyed/hive-succinctly
+ links: 
+  - hbase

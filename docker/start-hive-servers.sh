@@ -1,6 +1,9 @@
 
+#Hive web interface
+$HIVE_HOME/bin/hive --service hwi > /dev/null 2> /dev/null &
+
 # HiverServer2 - JDBC
-/opt/hive/bin/hive --service hiveserver2 &
+$HIVE_HOME/bin/hive --service hiveserver2 &
 
 # HCatalog
 #TODO $HIVE_HOME/hcatalog/sbin/hcat_server.sh
