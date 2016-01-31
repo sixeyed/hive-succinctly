@@ -11,5 +11,7 @@ hive:
  container_name: hive
  hostname: hive
  image: sixeyed/hive-succinctly
+ ports:
+  - "8088:8088"
  links: 
   - hbase

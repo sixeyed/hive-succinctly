@@ -45,4 +45,19 @@ WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key')
 TBLPROPERTIES ('hbase.table.name' = 'hbase-table');
 
 
-CREATE EXTERNAL TABLE hbase_table(rowkey STRING, cf1_data STRING) STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,cf1:data') TBLPROPERTIES ('hbase.table.name' = 'hbase-table');
+CREATE EXTERNAL TABLE hbase_table(rowkey STRING, cf1_data STRING) STORED BY
+'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES
+('hbase.columns.mapping' = ':key,cf1:data') TBLPROPERTIES ('hbase.table.name'
+= 'hbase-table');
+
+CREATE EXTERNAL TABLE device_events(rowkey STRING, eventName STRING, receivedAt STRING, payload STRING, metadata MAP<string, string>)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,e:n,e:t,e:p,m:')
+TBLPROPERTIES ('hbase.table.name' = 'device-events');
+
+
+CREATE VIEW device_events_period(rowkey, deviceId, period, eventname, receivedat) AS
+SELECT rowkey, split(rowkey, '\\|')[0], split(ROWKEY, '\\|')[1], eventname, receivedat FROM device_events;
+
+
+create index ix_device_events_period on table device_events (split(ROWKEY, '\\|')[1]) as 'BITMAP' with deferred rebuild;
