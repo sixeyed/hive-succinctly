@@ -38,17 +38,10 @@ lines terminated by '\n'
 stored as textfile
 location '/server-metrics';
 
-
-CREATE EXTERNAL TABLE hbase_table(rowkey STRING)
-STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
-WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key')
+CREATE EXTERNAL TABLE hbase_table(rowkey STRING, cf1_data STRING) 
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' 
+WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,cf1:data') 
 TBLPROPERTIES ('hbase.table.name' = 'hbase-table');
-
-
-CREATE EXTERNAL TABLE hbase_table(rowkey STRING, cf1_data STRING) STORED BY
-'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES
-('hbase.columns.mapping' = ':key,cf1:data') TBLPROPERTIES ('hbase.table.name'
-= 'hbase-table');
 
 CREATE EXTERNAL TABLE device_events(rowkey STRING, eventName STRING, receivedAt STRING, payload STRING, metadata MAP<string, string>)
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'

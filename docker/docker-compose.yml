@@ -6,6 +6,9 @@ hbase:
   - "2181"
   - "60000"
   - "60020"
+ ports:
+  - "60010:60010"
+  - "60030:60030"
 
 hive:
  container_name: hive
@@ -13,5 +16,6 @@ hive:
  image: sixeyed/hive-succinctly
  ports:
   - "8088:8088"
+  - "8080:8888"
  links: 
   - hbase
