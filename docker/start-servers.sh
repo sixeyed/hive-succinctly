@@ -1,8 +1,10 @@
+#!/bin/bash
+
 # Hadoop
 service ssh start
+$HADOOP_HOME/etc/hadoop/hadoop-env.sh
 $HADOOP_HOME/sbin/start-dfs.sh
 $HADOOP_HOME/sbin/start-yarn.sh
-sleep 30s
 
 # HiverServer2 - JDBC
 $HIVE_HOME/bin/hive --service hiveserver2 &

@@ -1,7 +1,7 @@
 hbase:
  container_name: hbase
  hostname: hbase
- image: sixeyed/hbase-succinctly:2
+ image: sixeyed/hbase-succinctly:1.1.3
  expose:
   - "2181"
   - "60000"
@@ -13,9 +13,11 @@ hbase:
 hive:
  container_name: hive
  hostname: hive
- image: sixeyed/hive-succinctly
+ image: sixeyed/hive-succinctly:1.2.1
  ports:
   - "8088:8088"
   - "8080:8888"
+  - "8042:8042"
+  - "19888:19888"
  links: 
   - hbase

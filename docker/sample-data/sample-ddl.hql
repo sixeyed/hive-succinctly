@@ -1,4 +1,7 @@
 
+create table dual (col string);
+insert into dual(col) values('');
+
 --create server_logs over HDFS, correct format:
 create external table server_logs (
 serverid string, loggedat bigint,
@@ -43,6 +46,8 @@ STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
 WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,cf1:data') 
 TBLPROPERTIES ('hbase.table.name' = 'hbase-table');
 
+create index ix_hbase_table_cf1_data on table hbase_table (cf1_data) as 'COMPACT' with deferred rebuild;
+
 CREATE EXTERNAL TABLE device_events(rowkey STRING, eventName STRING, receivedAt STRING, payload STRING, metadata MAP<string, string>)
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
 WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,e:n,e:t,e:p,m:')
@@ -54,3 +59,22 @@ SELECT rowkey, split(rowkey, '\\|')[0], split(ROWKEY, '\\|')[1], eventname, rece
 
 
 create index ix_device_events_period on table device_events (split(ROWKEY, '\\|')[1]) as 'BITMAP' with deferred rebuild;
+
+create table syslogs(loggedat timestamp, host string, process string, pid int, message string) stored as ORC;
+
+create table syslog_summaries(processedat timestamp, host string, entries int) stored as ORC;
+
+create temporary table etl_progress(status string, stage string, processedat timestamp, rowcount bigint);
+
+ALTER VIEW device_events_period AS SELECT split(rowkey, '\\|')[0] deviceid, split(ROWKEY, '\\|')[1] period, eventname, receivedat FROM device_events WHERE split(ROWKEY, '\\|')[1] is not null;
+
+create table syslogs_acid (host string, loggedat timestamp, process string, pid int, message string, hotspot boolean) clustered by(host) into 4 buckets stored as ORC tblproperties ("transactional" = "true");
+
+
+#syslogs variants
+
+create table syslogs_flat (entry string);
+
+create table syslogs_no_partitions(period string, host string, loggedat timestamp, process string, pid int, message string) stored as ORC;
+
+create table syslogs_with_partitions(loggedat timestamp, process string, pid int, message string) partitioned by (period string, host string) stored as ORC;
