@@ -1,0 +1,2 @@
+{ "device" : { "deviceClass":"tablet", "codeName":"jericho", "firmwareVersions":["1.0.0", "1.0.1"], "cpu" :{	"speed":900, "cores":2 }}}
+{ "device" : { "deviceClass":"phone", "codeName":"discus", "firmwareVersions":["1.4.1", "1.5.2"], "cpu" :{ "speed":1300, "cores":4 }}}

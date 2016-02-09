@@ -78,3 +78,23 @@ create table syslogs_flat (entry string);
 create table syslogs_no_partitions(period string, host string, loggedat timestamp, process string, pid int, message string) stored as ORC;
 
 create table syslogs_with_partitions(loggedat timestamp, process string, pid int, message string) partitioned by (period string, host string) stored as ORC;
+
+#servers- collection ite,s
+create external table servers
+(name string, ipAddresses array<string>, hardware struct<cores:int, ram:int, disk:int>, site map<string, string>)
+row format delimited
+fields terminated by ','
+collection items terminated by ':'
+map keys terminated by '='
+lines terminated by '\n'
+stored as textfile
+location '/servers';
+
+
+add jar /tmp/json-serde-1.3.7-jar-with-dependencies.jar
+
+create external table devices
+(device struct<deviceClass:string, codeName:string, 
+firmwareVersions: array<string>, cpu:struct<speed:int, cores:int>>)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+location '/devices';
